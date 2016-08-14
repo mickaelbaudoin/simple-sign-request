@@ -1,0 +1,26 @@
+{
+    "name": "mickaelbaudoin/simple-sign-request",
+    "description": "Signature request api rest",
+    "type": "project",
+    "homepage": "https://github.com/mickaelbaudoin/simple-sign-request",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "BAUDOIN Mickael",
+            "homepage": "https://github.com/mickaelbaudoin/"
+        }
+    ],
+    "require": {
+        "php": "^5.5",
+    }
+    "autoload": {
+        "psr-4": {
+            "SimpleSignRequest\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SimpleSignRequestTest\\": "test/"
+        }
+    }
+}
