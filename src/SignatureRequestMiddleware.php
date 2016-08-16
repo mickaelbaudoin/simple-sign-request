@@ -18,7 +18,7 @@ class SignatureRequestMiddleware {
     
     protected $secret;
     
-    protected $expire;
+    protected $expireSecond;
     
     const REQUIRED_HEADERS = array('X-API-token', 'X-API-timestamp', 'X-API-signature', 'X-API-once');
     
@@ -37,18 +37,18 @@ class SignatureRequestMiddleware {
         return $response->withHeader('Content-Type', 'application/json');
     }
     
-    public function __construct(array $header = array(), $secret, $expire = '5min') {
-        $this->headersCustom = $header;
+    public function __construct($secret, array $headersCustom = array(), $expireSecond = 60) {
+        $this->headersCustom = $headersCustom;
         if(!is_string($secret)){
             throw new Exception\NotStringException('Parameter secret is not string !');
         }
         
-        if(!is_string($expire)){
-            throw new Exception\NotStringException('Parameter expire is not string !');
+        if(!is_integer($expireSecond)){
+            throw new Exception\NotIntegerException('Parameter expire is not integer !');
         }
         
         $this->secret = $secret;
-        $this->expire = $expire;
+        $this->expireSecond = $expireSecond;
     }
     
     /**
@@ -77,7 +77,7 @@ class SignatureRequestMiddleware {
      * @return boolean
      */
     protected function checkSignature(ServerRequestInterface $request){
-        $signatureClient = $request->getHeaders()['X-API-signature'];
+        $signatureClient = $request->getHeader('X-API-signature')[0];
         $signatureServer = SignatureFactory::generateSignature($request, $this->secret, $this->headersCustom);
         
         return $signatureClient == $signatureServer->getHash();
@@ -90,7 +90,11 @@ class SignatureRequestMiddleware {
      * @return boolean
      */
     protected function checkTimestamp(ServerRequestInterface $request){
-        //calculer par rapport au timestampp envoyer et au timstamp expire si la requette est encore valide
-        return true;
+        $timeCurrent = time();
+        $timeEnd =  $timeCurrent + $this->expireSecond;
+        $timeBegin = $timeCurrent - $this->expireSecond;
+        $timeSend = (int) $request->getHeader('X-API-timestamp')[0];
+        
+        return ($timeSend < $timeEnd && $timeSend > $timeBegin);
     }
 }

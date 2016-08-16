@@ -83,10 +83,11 @@ class Signature implements SignatureInterface{
                 . $this->uri;
         
         if(count($this->headersCustom) > 0){
-            $data += implode('',$this->headersCustom);
+            $data .= implode('',$this->headersCustom);
         }
         
-        $this->hash = hash_hmac("sha256", $data, $this->secret);
+        $this->hash = base64_encode(hash_hmac("sha256", $data, $this->secret,true));
+        
     }
     
     public function getHash() {
