@@ -23,7 +23,7 @@ class SignatureRequestMiddlewareFactory {
     
     public function __invoke(ContainerInterface $container)
     {
-        return new SignatureRequestMiddleware($secret);
+        return new \MB\SignatureRequestMiddleware($secret);
     }
 }
 ```
@@ -40,7 +40,7 @@ return [
         'factories' => [
             Helper\ServerUrlMiddleware::class => Helper\ServerUrlMiddlewareFactory::class,
             Helper\UrlHelperMiddleware::class => Helper\UrlHelperMiddlewareFactory::class,
-            SignatureRequestMiddleware::class => SignatureRequestMiddlewareFactory::class
+            MB\SignatureRequestMiddleware::class => SignatureRequestMiddlewareFactory::class
            
         ],
     ],
@@ -52,7 +52,7 @@ return [
             'middleware' => [
                 ApplicationFactory::ROUTING_MIDDLEWARE,
                 Helper\UrlHelperMiddleware::class,
-                SignatureRequestMiddleware::class,
+                MB\SignatureRequestMiddleware::class,
                 // Add more middleware here that needs to introspect the routing
                 // results; this might include:
                 // - route-based authentication
