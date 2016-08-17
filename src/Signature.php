@@ -1,5 +1,5 @@
 <?php
-namespace SimpleSignRequest;
+namespace MB\SimpleSignRequest;
 
 use \Psr\Http\Message\ServerRequestInterface;
 

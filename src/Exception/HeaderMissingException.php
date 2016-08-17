@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleSignRequest\Exception;
+namespace MB\SimpleSignRequest\Exception;
 
 /**
  * Description of HeaderMissingException

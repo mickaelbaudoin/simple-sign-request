@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleSignRequestTest;
+namespace MB\SimpleSignRequestTest;
 
 use \PHPUnit\Framework\TestCase;
 
@@ -21,9 +21,9 @@ class SignatureTest extends TestCase{
         try{
             $header = [];
             $request = new \GuzzleHttp\Psr7\ServerRequest('GET', 'https://localhost/api/article/12', $header);
-            $signature = new \SimpleSignRequest\Signature($request, self::SECRET);
+            $signature = new \MB\SimpleSignRequest\Signature($request, self::SECRET);
             
-        } catch (\SimpleSignRequest\Exception\SignaturePropertyIsNull $ex) {
+        } catch (\MB\SimpleSignRequest\Exception\SignaturePropertyIsNull $ex) {
              $this->assertTrue(true);
         }
         
@@ -38,10 +38,10 @@ class SignatureTest extends TestCase{
             'X-API-once' => self::ONCE
                 ];
             $request = new \GuzzleHttp\Psr7\ServerRequest('GET', 'https://localhost/api/article/12', $header);
-            $signature = new \SimpleSignRequest\Signature($request, self::SECRET);
+            $signature = new \MB\SimpleSignRequest\Signature($request, self::SECRET);
             $this->assertTrue(true);
             
-        } catch (\SimpleSignRequest\Exception\SignaturePropertyIsNull $ex) {
+        } catch (\MB\SimpleSignRequest\Exception\SignaturePropertyIsNull $ex) {
              echo "\n Exception Message (Line " . __LINE__ . ") : " . $ex->getMessage();
              $this->assertTrue(false);
         }

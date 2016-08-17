@@ -18,12 +18,12 @@
     },
     "autoload": {
         "psr-4": {
-            "SimpleSignRequest\\": "src/"
+            "MB\\SimpleSignRequest\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "SimpleSignRequestTest\\": "test/"
+            "MB\\SimpleSignRequestTest\\": "test/"
         }
     }
 }

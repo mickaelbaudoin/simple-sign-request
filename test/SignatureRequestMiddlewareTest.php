@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleSignRequestTest;
+namespace MB\SimpleSignRequestTest;
 
 use \PHPUnit\Framework\TestCase;
 
@@ -24,10 +24,10 @@ class SignatureRequestMiddlewareTest extends TestCase{
             $response = new \GuzzleHttp\Psr7\Response();
             $callback = function($req, $res) use ($response) {return $response;};
 
-            $middleware = new \SimpleSignRequest\SignatureRequestMiddleware(self::SECRET);
+            $middleware = new \MB\SimpleSignRequest\SignatureRequestMiddleware(self::SECRET);
             $middleware($request,$response,$callback);
             
-        }catch(\SimpleSignRequest\Exception\HeaderMissingException $e){
+        }catch(\MB\SimpleSignRequest\Exception\HeaderMissingException $e){
             $this->assertTrue(true);
         }
         
@@ -45,7 +45,7 @@ class SignatureRequestMiddlewareTest extends TestCase{
         $response = new \GuzzleHttp\Psr7\Response();
         $callback = function($req, $res) use ($response) {return $response;};
         
-        $middleware = new \SimpleSignRequest\SignatureRequestMiddleware(self::SECRET);
+        $middleware = new \MB\SimpleSignRequest\SignatureRequestMiddleware(self::SECRET);
         $reponseServer = $middleware($request,$response,$callback);
         
         $this->assertEquals(403, $reponseServer->getStatusCode());
@@ -66,7 +66,7 @@ class SignatureRequestMiddlewareTest extends TestCase{
         $response = new \GuzzleHttp\Psr7\Response();
         $callback = function($req, $res) use ($response) {return $response;};
         
-        $middleware = new \SimpleSignRequest\SignatureRequestMiddleware(self::SECRET);
+        $middleware = new \MB\SimpleSignRequest\SignatureRequestMiddleware(self::SECRET);
         $reponseServer = $middleware($request,$response,$callback);
         
         $this->assertEquals(403, $reponseServer->getStatusCode());
@@ -88,7 +88,7 @@ class SignatureRequestMiddlewareTest extends TestCase{
         $response = new \GuzzleHttp\Psr7\Response();
         $callback = function($req, $res) use ($response) {return $response;};
         
-        $middleware = new \SimpleSignRequest\SignatureRequestMiddleware(self::SECRET);
+        $middleware = new \MB\SimpleSignRequest\SignatureRequestMiddleware(self::SECRET);
         $reponseServer = $middleware($request,$response,$callback);
         
         $this->assertEquals(403, $reponseServer->getStatusCode());
@@ -111,7 +111,7 @@ class SignatureRequestMiddlewareTest extends TestCase{
         $response = new \GuzzleHttp\Psr7\Response();
         $callback = function($req, $res) use ($response) {return $response;};
         
-        $middleware = new \SimpleSignRequest\SignatureRequestMiddleware(self::SECRET);
+        $middleware = new \MB\SimpleSignRequest\SignatureRequestMiddleware(self::SECRET);
         $reponseServer = $middleware($request,$response,$callback);
         
         $this->assertEquals(200, $reponseServer->getStatusCode());
@@ -143,7 +143,7 @@ class SignatureRequestMiddlewareTest extends TestCase{
         $callback = function($req, $res) use ($response) {return $response;};
         
         //On spécifit les headerCustom qu'on a rajouter
-        $middleware = new \SimpleSignRequest\SignatureRequestMiddleware(self::SECRET,$headersCustom);
+        $middleware = new \MB\SimpleSignRequest\SignatureRequestMiddleware(self::SECRET,$headersCustom);
         $reponseServer = $middleware($request,$response,$callback);
         
         $this->assertEquals(200, $reponseServer->getStatusCode());
