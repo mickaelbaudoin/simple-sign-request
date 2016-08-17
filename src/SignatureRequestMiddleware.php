@@ -24,11 +24,10 @@ class SignatureRequestMiddleware {
     
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next) {
         
-        if($this->checkRequiredHeader($request)){
-            if($this->checkTimestamp($request)){
-                if($this->checkSignature($request)){
-                    return $next($request, $response);
-                }
+        $this->checkRequiredHeader($request);
+        if($this->checkTimestamp($request)){
+            if($this->checkSignature($request)){
+                return $next($request, $response);
             }
         }
         
@@ -55,7 +54,7 @@ class SignatureRequestMiddleware {
      * Permet de vérifier que les headers obligatoires sont bien présent
      * 
      * @param ServerRequestInterface $request
-     * @return boolean
+     * @return void
      * @throws Exception\HeaderMissingException
      */
     protected function checkRequiredHeader(ServerRequestInterface $request){
@@ -66,8 +65,6 @@ class SignatureRequestMiddleware {
                 throw new Exception\HeaderMissingException("Header $header is missing !");
             }
         }
-        
-        return true;
     }
     
     /**

@@ -37,7 +37,13 @@ class Signature implements SignatureInterface{
     }
     
     protected function checkRequiredProperties(){
-        return true;
+        $mapProperties = ['secret','token','timestamp','methodHttp', 'once'];
+        
+        foreach($mapProperties as $prop){
+            if($this->{$prop} == null){
+                throw new Exception\SignaturePropertyIsNull("Property $prop is required !");
+            }
+        }
     }
     
     public function getSecret() {
