@@ -18,6 +18,8 @@ class SignatureRequestMiddleware {
     
     protected $expireSecond;
     
+    private $ignorePath = array();
+    
     const REQUIRED_HEADERS = array('X-API-token', 'X-API-timestamp', 'X-API-signature', 'X-API-once');
     
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next) {
@@ -91,5 +93,22 @@ class SignatureRequestMiddleware {
         $timeSend = (int) $request->getHeader('X-API-timestamp')[0];
         
         return ($timeSend < $timeEnd && $timeSend > $timeBegin);
+    }
+    
+    public function addIgnorePath($path){
+        array_push($this->ignorePath, $path);
+    }
+    
+    protected function ignoringPath(ServerRequestInterface $request){
+        $path = $request->getUri()->getPath();
+        
+        foreach($this->ignorePath as $ignorePath){
+            if(preg_match("/$ignorePath/", $path)){
+                return true;
+            }
+        }
+        
+        return false;
+        
     }
 }
