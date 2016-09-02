@@ -23,10 +23,15 @@ class SignatureRequestMiddlewareFactory {
     
     public function __invoke(ContainerInterface $container)
     {
-        return new \MB\SignatureRequestMiddleware($secret);
+        $middleware = new \MB\SignatureRequestMiddleware($secret);
+        $middleware->addIgnorePath('/auth');
+        
+        return $middleware;
     }
 }
 ```
+Optional parameters for SignatureRequestMiddleware constructor :
+new \MB\SignatureRequestMiddleware($secret,$headersCustom = array(), $expireSecond = 60);
 
 - Edit config for configured Factories and Middlewares
 
