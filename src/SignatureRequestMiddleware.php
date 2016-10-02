@@ -20,7 +20,7 @@ class SignatureRequestMiddleware {
     
     private $ignorePath = array();
     
-    const REQUIRED_HEADERS = array('X-API-token', 'X-API-timestamp', 'X-API-signature', 'X-API-once');
+    const REQUIRED_HEADERS = array('x-api-token', 'x-api-timestamp', 'x-api-signature', 'x-api-once');
     
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next) {
         
