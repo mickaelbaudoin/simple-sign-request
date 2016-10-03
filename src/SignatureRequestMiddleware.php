@@ -24,16 +24,20 @@ class SignatureRequestMiddleware {
     
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next) {
         
-        $this->checkRequiredHeader($request);
-        if($this->checkTimestamp($request)){
-            if($this->checkSignature($request)){
-                return $next($request, $response);
+        if(!$this->ignoringPath($request)){
+            $this->checkRequiredHeader($request);
+            if($this->checkTimestamp($request)){
+                if($this->checkSignature($request)){
+                    return $next($request, $response);
+                }
             }
+
+            $response = $response->withStatus(403);
+            $response->getBody()->write(json_encode(['message' => 'Unauthorized', 'code' => 403]));
+            return $response->withHeader('Content-Type', 'application/json');
         }
         
-        $response = $response->withStatus(403);
-        $response->getBody()->write(json_encode(['message' => 'Unauthorized', 'code' => 403]));
-        return $response->withHeader('Content-Type', 'application/json');
+        return $next($request,$response);
     }
     
     public function __construct($secret, array $headersCustom = array(), $expireSecond = 60) {
@@ -74,7 +78,7 @@ class SignatureRequestMiddleware {
      * @return boolean
      */
     protected function checkSignature(ServerRequestInterface $request){
-        $signatureClient = $request->getHeader('X-API-signature')[0];
+        $signatureClient = $request->getHeader('x-api-signature')[0];
         $signatureServer = SignatureFactory::generateSignature($request, $this->secret, $this->headersCustom);
         
         return $signatureClient == $signatureServer->getHash();
@@ -90,7 +94,7 @@ class SignatureRequestMiddleware {
         $timeCurrent = time();
         $timeEnd =  $timeCurrent + $this->expireSecond;
         $timeBegin = $timeCurrent - $this->expireSecond;
-        $timeSend = (int) $request->getHeader('X-API-timestamp')[0];
+        $timeSend = (int) $request->getHeader('x-api-timestamp')[0];
         
         return ($timeSend < $timeEnd && $timeSend > $timeBegin);
     }
@@ -103,7 +107,7 @@ class SignatureRequestMiddleware {
         $path = $request->getUri()->getPath();
         
         foreach($this->ignorePath as $ignorePath){
-            if(preg_match("/$ignorePath/", $path)){
+            if(preg_match("/^\\" .$ignorePath."$/", $path)){
                 return true;
             }
         }
